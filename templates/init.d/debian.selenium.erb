@@ -1,0 +1,77 @@
+#!/bin/bash
+# Note that this script requires you to have
+# an X window running on Display :90
+# This can be done by running: /usr/bin/Xvfb :90 -ac -screen 0 1024x768x8 &
+#
+# You can save this script as /etc/init.d/selenium to start and stop selenium
+ 
+PORT=4444
+ 
+DESC="Selenium server"
+RUN_AS=selenium
+JAVA_BIN=<%= @java %>
+ 
+SELENIUM_DIR=/etc/selenium
+PID_FILE="/tmp/selenium.pid"
+
+JAR_INSTALL_ROOT='<%= @install_root %>'
+JAR_NAME='<%= @jar_name %>'
+JAR_FILE="${JAR_INSTALL_ROOT}/jars/${JAR_NAME}"
+LOG_FILE="/var/log/selenium/selenium.log"
+DRIVER_OPTION='<%= @options %>'
+DAEMON_OPTS=" -jar $JAR_FILE $DRIVER_OPTION -log $LOG_FILE -port $PORT"
+ 
+NAME=selenium
+ 
+export DISPLAY=:90
+
+case "${1:-''}" in
+        'start')
+                if test -f $PID_FILE
+                then
+                        echo "Selenium is already running."
+                else
+                        $JAVA_BIN $DAEMON_OPTS > /var/log/selenium/selenium-output.log 2> /var/log/selenium/selenium-error.log & echo $! > $PID_FILE
+                        echo "Starting Selenium..."
+
+                        error=$?
+                        if test $error -gt 0
+                        then
+                                echo "${bon}Error $error! Couldn't start Selenium!${boff}"
+                        fi
+                fi
+        ;;
+        'stop')
+                if test -f $PID_FILE
+                then
+                        echo "Stopping Selenium..."
+                        PID=`cat ${PID_FILE}`
+                        kill -3 $PID
+                        if kill -9 $PID ;
+                                then
+                                        sleep 2
+                                        test -f $PID_FILE && rm -f $PID_FILE
+                                else
+                                        echo "Selenium could not be stopped..."
+                                fi
+                else
+                        echo "Selenium is not running."
+                fi
+                ;;
+        'restart')
+                if test -f $PID_FILE
+                then
+                        kill -HUP `cat ${PID_FILE}`
+                        test -f $PID_FILE && rm -f $PID_FILE
+                        sleep 1
+                        $JAVA_BIN $DAEMON_OPTS > /var/log/selenium/selenium-output.log 2> /var/log/selenium/selenium-error.log & echo $! > $PID_FILE
+                        echo "Reload Selenium..."
+                else
+                        echo "Selenium isn't running..."
+                fi
+                ;;
+        *)      # no parameter specified
+                echo "Usage: $SELF start|stop|restart"
+                exit 1
+        ;;
+esac

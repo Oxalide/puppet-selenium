@@ -13,6 +13,7 @@ class selenium(
   $url                = undef,
   $download_timeout   = $selenium::params::download_timeout,
   $nocheckcertificate = false,
+  $with_chrome_driver = false,
 ) inherits selenium::params {
   validate_string($user)
   validate_string($group)
@@ -22,6 +23,7 @@ class selenium(
   validate_string($url)
   validate_string($download_timeout)
   validate_bool($nocheckcertificate)
+  validate_bool($with_chrome_driver)
 
   include wget
 
@@ -90,4 +92,7 @@ class selenium(
     minsize       => '100k',
   }
 
+  if $with_chrome_driver {
+    include selenium::chrome
+  }
 }
