@@ -20,6 +20,7 @@ describe 'selenium::node', :type => :class do
     end
   end
 
+  # Redhat Os
   context 'for osfamily RedHat' do
     let(:facts) {{ :osfamily => 'RedHat' }}
 
@@ -79,4 +80,63 @@ describe 'selenium::node', :type => :class do
     end
   end
 
+  # Debian Os
+  context 'for osfamily Debian' do
+    let(:facts) {{ :osfamily => 'RedHat' }}
+
+    context 'no params' do
+      it_behaves_like 'node', {}
+    end
+
+    context 'display => :42' do
+      p = { :display => ':42' }
+      let(:params) { p }
+
+      it_behaves_like 'node', p
+    end
+
+    context 'display => :42' do
+      let(:params) {{ :display => [] }}
+
+      it 'should fail' do
+        expect {
+          should contain_class('selenium::node')
+        }.to raise_error
+      end
+    end
+
+    context 'options => -foo' do
+      p = { :options => '-foo' }
+      let(:params) { p }
+
+      it_behaves_like 'node', p
+    end
+
+    context 'options => []' do
+      let(:params) {{ :options => [] }}
+
+      it 'should fail' do
+        expect {
+          should contain_class('selenium::node')
+        }.to raise_error
+      end
+    end
+
+    context 'hub => http://foo' do
+      p = { :hub => 'http://foo' }
+      let(:params) { p }
+
+      it_behaves_like 'node', p
+    end
+
+    context 'hub => []' do
+      let(:params) {{ :hub => [] }}
+
+      it 'should fail' do
+        expect {
+          should contain_class('selenium::node')
+        }.to raise_error
+      end
+    end
+  end
 end

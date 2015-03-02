@@ -43,4 +43,29 @@ describe 'selenium::hub', :type => :class do
     end
   end
 
+  context 'for osfamily Debian' do
+    let(:facts) {{ :osfamily => 'Debian' }}
+
+    context 'no params' do
+      it_behaves_like 'hub', {}
+    end
+
+    context 'options => -foo' do
+      p = { :options => '-foo' }
+      let(:params) { p }
+
+      it_behaves_like 'hub', p
+    end
+
+    context 'options => []' do
+      let(:params) {{ :options => [] }}
+
+      it 'should fail' do
+        expect {
+          should contain_class('selenium::hub')
+        }.to raise_error
+      end
+    end
+  end
+
 end

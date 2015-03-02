@@ -22,35 +22,26 @@ define selenium::config(
   # prog is the 'name' of the init.d script.
   $prog = "selenium${name}"
 
-  case $::osfamily {
-    'redhat': {
+  if ($::osfamily == 'redhat') {
+    $template = "${module_name}/init.d/redhat.selenium.erb"
+  } elsif ($::osfamily == 'Debian') {
+    $template = "${module_name}/init.d/debian.selenium.erb"
+  }
+
+case $::osfamily {
+    'redhat', 'Debian': {
       file { "/etc/init.d/${prog}":
         ensure  => 'file',
         owner   => 'root',
         group   => 'root',
         mode    => '0755',
-        content => template("${module_name}/init.d/redhat.selenium.erb"),
+        content => template("${template}"),
       } ~>
       service { $prog:
         ensure     => running,
         hasstatus  => true,
         hasrestart => true,
         enable     => true,
-      }
-    }
-    'Debian': {
-      file {"/etc/init.d/$prog":
-        ensure => 'file',
-        owner  => 'root',
-        group  => 'root',
-        mode   => '0755',
-        content=> template("${module_name}/init.d/debian.selenium.erb"),
-      }~>
-      service {$prog:
-        ensure    => running,
-        hasstatus => true,
-        hasrestart=> true,
-        enable    => true,
       }
     }
     default: {
