@@ -13,6 +13,7 @@ describe 'selenium', :type => :class do
       :url                => '',
       :download_timeout   => '90',
       :nocheckcertificate => false,
+      :with_chrome_driver => false,
     }
 
     if params
@@ -186,6 +187,133 @@ describe 'selenium', :type => :class do
         }.to raise_error
       end
     end
+
+    context 'with_chrome_driver => true' do
+      let(:params) { { :with_chrome_driver => true } }
+
+      it { should contain_class('selenium::chrome') }
+    end
   end
 
+  context 'for osfamily Debian' do
+    let(:facts) {{ :osfamily => 'Debian' }}
+
+    context 'no params' do
+      it_behaves_like 'selenium', {}
+    end
+
+    context 'user => foo' do
+      p = { :user => 'foo' }
+      let(:params) { p }
+
+      it_behaves_like 'selenium', p
+    end
+
+    context 'user => []' do
+      p = { :user => [] }
+      let(:params) { p }
+
+      it 'should fail' do
+        expect {
+          should contain_class('selenium')
+        }.to raise_error
+      end
+    end
+
+    context 'group => foo' do
+      p = { :group => 'foo' }
+      let(:params) { p }
+
+      it_behaves_like 'selenium', p
+    end
+
+    context 'group => []' do
+      p = { :group => [] }
+      let(:params) { p }
+
+      it 'should fail' do
+        expect {
+          should contain_class('selenium')
+        }.to raise_error
+      end
+    end
+
+    context 'install_root => /foo/selenium' do
+      p = { :install_root => '/foo/selenium' }
+      let(:params) { p }
+
+      it_behaves_like 'selenium', p
+    end
+
+    context 'install_root => []' do
+      p = { :install_root => [] }
+      let(:params) { p }
+
+      it 'should fail' do
+        expect {
+          should contain_class('selenium')
+        }.to raise_error
+      end
+    end
+
+    context 'java => /opt/java' do
+      p = { :java => '/opt/java' }
+      let(:params) { p }
+
+      it_behaves_like 'selenium', p
+    end
+
+    context 'java => []' do
+      p = { :java => [] }
+      let(:params) { p }
+
+      it 'should fail' do
+        expect {
+          should contain_class('selenium')
+        }.to raise_error
+      end
+    end
+
+    context 'download_timeout => 42' do
+      p = { :download_timeout => '42' }
+      let(:params) { p }
+
+      it_behaves_like 'selenium', p
+    end
+
+    context 'download_timeout => []' do
+      p = { :download_timeout => [] }
+      let(:params) { p }
+
+      it 'should fail' do
+        expect {
+          should contain_class('selenium')
+        }.to raise_error
+      end
+    end
+
+    context 'nocheckcertificate => true' do
+      p = { :nocheckcertificate => true }
+      let(:params) { p }
+
+      it_behaves_like 'selenium', p
+    end
+
+    context 'nocheckcertificate => []' do
+      p = { :nocheckcertificate => [] }
+      let(:params) { p }
+
+      it 'should fail' do
+        expect {
+          should contain_class('selenium')
+        }.to raise_error
+      end
+    end
+
+    context 'with_chrome_driver => true' do
+      let(:params) { { :with_chrome_driver => true } }
+
+      it { should contain_class('selenium::chrome') }
+    end
+  end
 end

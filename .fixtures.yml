@@ -9,5 +9,8 @@ fixtures:
     logrotate:
       repo: 'git://github.com/rodjek/puppet-logrotate.git'
       ref: '1.1.1'
+    puppi:
+      repo: 'git://github.com/example42/puppi.git'
+      ref:  'v2.1.10'
   symlinks:
     selenium: "#{source_dir}"
