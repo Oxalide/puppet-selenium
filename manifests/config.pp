@@ -7,6 +7,7 @@ define selenium::config(
   $user         = $selenium::params::user,
   $group        = $selenium::params::group,
   $install_root = $selenium::params::install_root,
+  $port         = $selenium::port,
   $options      = $selenium::params::server_options,
   $java         = $selenium::params::java,
   $jar_name     = $selenium::jar_name,

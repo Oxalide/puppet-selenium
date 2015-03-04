@@ -1,11 +1,27 @@
 #!/bin/bash
+# <%= @prog %> Selenium server init script
 # Note that this script requires you to have
 # an X window running on Display :90
 # This can be done by running: /usr/bin/Xvfb :90 -ac -screen 0 1024x768x8 &
 #
 # You can save this script as /etc/init.d/selenium to start and stop selenium
- 
-PORT=4444
+#
+# chkconfig:   2345 99 99
+#
+
+### BEGIN INIT INFO
+# Provides:
+# Required-Start:
+# Required-Stop:
+# Should-Start:
+# Should-Stop:
+# Default-Start:
+# Default-Stop:
+# Short-Description:
+# Description:
+### END INIT INFO
+
+PORT=<%= @port %>
  
 DESC="Selenium server"
 RUN_AS=selenium
@@ -19,7 +35,7 @@ JAR_NAME='<%= @jar_name %>'
 JAR_FILE="${JAR_INSTALL_ROOT}/jars/${JAR_NAME}"
 LOG_FILE="/var/log/selenium/selenium.log"
 DRIVER_OPTION='<%= @options %>'
-DAEMON_OPTS=" -jar $JAR_FILE $DRIVER_OPTION -log $LOG_FILE -port $PORT"
+DAEMON_OPTS=" -jar ${JAR_FILE} ${DRIVER_OPTION} -log ${LOG_FILE} -port ${PORT}"
  
 NAME=selenium
  
@@ -27,11 +43,11 @@ export DISPLAY=:90
 
 case "${1:-''}" in
         'start')
-                if test -f $PID_FILE
+                if test -f ${PID_FILE}
                 then
                         echo "Selenium is already running."
                 else
-                        $JAVA_BIN $DAEMON_OPTS > /var/log/selenium/selenium-output.log 2> /var/log/selenium/selenium-error.log & echo $! > $PID_FILE
+                        ${JAVA_BIN} ${DAEMON_OPTS} > /var/log/selenium/selenium-output.log 2> /var/log/selenium/selenium-error.log & echo $! > ${PID_FILE}
                         echo "Starting Selenium..."
 
                         error=$?
@@ -50,7 +66,7 @@ case "${1:-''}" in
                         if kill -9 $PID ;
                                 then
                                         sleep 2
-                                        test -f $PID_FILE && rm -f $PID_FILE
+                                        test -f ${PID_FILE} && rm -f ${PID_FILE}
                                 else
                                         echo "Selenium could not be stopped..."
                                 fi
@@ -62,9 +78,9 @@ case "${1:-''}" in
                 if test -f $PID_FILE
                 then
                         kill -HUP `cat ${PID_FILE}`
-                        test -f $PID_FILE && rm -f $PID_FILE
+                        test -f ${PID_FILE} && rm -f ${PID_FILE}
                         sleep 1
-                        $JAVA_BIN $DAEMON_OPTS > /var/log/selenium/selenium-output.log 2> /var/log/selenium/selenium-error.log & echo $! > $PID_FILE
+                        $JAVA_BIN ${DAEMON_OPTS} > /var/log/selenium/selenium-output.log 2> /var/log/selenium/selenium-error.log & echo $! > ${PID_FILE}
                         echo "Reload Selenium..."
                 else
                         echo "Selenium isn't running..."

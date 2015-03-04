@@ -10,6 +10,7 @@ class selenium(
   $install_root       = $selenium::params::install_root,
   $java               = $selenium::params::java,
   $version            = $selenium::params::version,
+  $port               = $selenium::params::port,
   $url                = undef,
   $download_timeout   = $selenium::params::download_timeout,
   $nocheckcertificate = false,

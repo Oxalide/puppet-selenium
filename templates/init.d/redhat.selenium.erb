@@ -35,6 +35,8 @@ SLNM_LOG="${SLNM_INSTALL_ROOT}/log/${SLNM_LOG_NAME}_stdout.log"
 SLNM_ERROR_LOG="${SLNM_INSTALL_ROOT}/log/${SLNM_LOG_NAME}_stderr.log"
 SLNM_JAR="${SLNM_INSTALL_ROOT}/jars/${SLNM_JAR_NAME}"
 
+PORT=<%= @port %>
+
 #config="<path to major config file>"
 
 #[ -e /etc/sysconfig/$prog ] && . /etc/sysconfig/$prog
@@ -43,7 +45,7 @@ lockfile=/var/lock/subsys/$prog
 pidfile=/var/run/${prog}.pid
 
 # pidfile must be owned by selenium user
-exec="DISPLAY=${SLNM_DISPLAY} java -jar ${SLNM_JAR} ${SLNM_OPTIONS} > ${SLNM_LOG} 2> ${SLNM_ERROR_LOG} & "'echo $!'" > ${pidfile}"
+exec="DISPLAY=${SLNM_DISPLAY} java -jar ${SLNM_JAR} ${SLNM_OPTIONS} -port ${PORT} > ${SLNM_LOG} 2> ${SLNM_ERROR_LOG} & "'echo $!'" > ${pidfile}"
 
 start() {
 #    [ -x $exec ] || exit 5
