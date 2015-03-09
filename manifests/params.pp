@@ -11,6 +11,7 @@ class selenium::params {
   $server_options   = '-Dwebdriver.enable.native.events=1'
   $hub_options      = '-role hub'
   $node_options     = "${server_options} -role node"
+  $install_java     = false
   $java             = 'java'
   $version          = '2.44.0'
   $port             = 4444

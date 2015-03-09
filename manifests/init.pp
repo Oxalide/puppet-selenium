@@ -1,14 +1,49 @@
-# == Class: selenium
+# Class: selenium
 #
-# Please refer to https://github.com/jhoblitt/puppet-selenium#selenium for
-# parameter documentation.
+# This module manages the selenium standlone server
 #
+# Parameters:
 #
+#  [*user*]
+#    The user alloed to launch selenium server
+#
+#  [*group*]
+#    The group alloed to launch selenium server
+#
+#  [*install_root*]
+#    The directory where install selenium
+#
+#  [*java*]
+#    The name of java bin
+#
+#  [*install_java*]
+#    Ensure if java should be installed
+#
+#  [*version*]
+#    The version of selenium to be installed
+#
+#  [*port*]
+#    The port to be used by selenium
+#
+#  [*url*]
+#    The url to be used by selenium
+#
+#  [*download_timeout*]
+#    Timeout used when downloading selenium binary
+#
+#  [*nocheckcertificate*]
+#    Check the selenium binary certifcate
+#
+#  [*with_chrome_driver*]
+#    Install and enable chrome driver for selenium
+#
+
 class selenium(
   $user               = $selenium::params::user,
   $group              = $selenium::params::group,
   $install_root       = $selenium::params::install_root,
   $java               = $selenium::params::java,
+  $install_java       = $selenium::params::install_java,
   $version            = $selenium::params::version,
   $port               = $selenium::params::port,
   $url                = undef,
@@ -24,6 +59,7 @@ class selenium(
   validate_string($url)
   validate_string($download_timeout)
   validate_bool($nocheckcertificate)
+  validate_bool($install_java)
   validate_bool($with_chrome_driver)
 
   include wget
@@ -33,6 +69,12 @@ class selenium(
   }
   group { $group:
     ensure => present,
+  }
+
+  if $install_java {
+    class {'java':
+      distribution => 'jdk'
+    }
   }
 
   $jar_name     = "selenium-server-standalone-${version}.jar"
