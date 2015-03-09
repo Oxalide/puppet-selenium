@@ -9,6 +9,7 @@ describe 'selenium', :type => :class do
       :group              => 'selenium',
       :install_root       => '/opt/selenium',
       :java               => 'java',
+      :install_java       => false,
       :version            => DEFAULT_VERSION,
       :url                => '',
       :download_timeout   => '90',
@@ -30,6 +31,7 @@ describe 'selenium', :type => :class do
       should contain_user(p[:user]).with_gid(p[:group])
       should contain_group(p[:group])
       should contain_class('wget')
+      should_not contain_class('java')
       should contain_class('selenium').with_version(p[:version])
       should contain_file("#{p[:install_root]}").with({
         'ensure' => 'directory',

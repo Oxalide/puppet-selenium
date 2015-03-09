@@ -12,5 +12,8 @@ fixtures:
     puppi:
       repo: 'git://github.com/example42/puppi.git'
       ref:  'v2.1.10'
+    java:
+      repo: 'git://github.com/puppetlabs/puppetlabs-java'
+      ref:  '1.1.1'
   symlinks:
     selenium: "#{source_dir}"
