@@ -39,7 +39,7 @@ DAEMON_OPTS=" -jar ${JAR_FILE} ${DRIVER_OPTION} -log ${LOG_FILE} -port ${PORT}"
  
 NAME=selenium
  
-export DISPLAY=:90
+export DISPLAY=:10
 
 case "${1:-''}" in
         'start')
@@ -47,6 +47,12 @@ case "${1:-''}" in
                 then
                         echo "Selenium is already running."
                 else
+                        echo "Starting Xvfb ..."
+                        Xvfb :10 -screen 0 1366x768x24 -ac &
+
+                        echo "Starting Google Chrome ..."
+                        google-chrome --remote-debugging-port=9222 &
+
                         ${JAVA_BIN} ${DAEMON_OPTS} > /var/log/selenium/selenium-output.log 2> /var/log/selenium/selenium-error.log & echo $! > ${PID_FILE}
                         echo "Starting Selenium..."
 
