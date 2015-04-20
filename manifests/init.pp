@@ -135,34 +135,6 @@ class selenium(
     minsize       => '100k',
   }
 
-  # Add google chrome signing key
-  $google_chrome_repo_name     = 'google-chrome'
-  $google_chrome_repo_gpg_key  = 'http://dl-ssl.google.com/linux/linux_signing_key.pub'
-  case $::osfamily {
-    'RedHat': {
-      yumrepo { $google_chrome_repo_name:
-        enabled  => 1,
-        gpgcheck => 1,
-        baseurl  => 'http://dl.google.com/linux/chrome/rpm/stable/$basearch',
-        gpgkey   => $google_chrome_repo_gpg_key,
-      }
-    }
-    'Debian': {
-      apt::source { $google_chrome_repo_name:
-        location          => 'http://dl.google.com/linux/chrome/deb/',
-        release           => 'stable',
-        key_source        => $google_chrome_repo_gpg_key,
-        key               => '7FAC5991',
-        repos             => 'main',
-        include_src       => false,
-      }
-    }
-  }->
-  package { "${google_chrome_repo_name}-stable":
-    ensure => installed,
-  }
-
-
   if ! defined(Package['openjdk-7-jre']) {
     package { 'openjdk-7-jre':
       ensure => installed,
