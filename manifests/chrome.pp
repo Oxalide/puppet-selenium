@@ -24,6 +24,8 @@ class selenium::chrome(
   $chrome_url_deb        = 'http://mirror.pcbeta.com/google/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_41.0.2272.118-1_amd64.deb'
   $chrome_destination    = '/tmp/google-chrome.deb'
 
+  ensure_packages(['unzip'])
+
   file { $target_dir:
     ensure => 'directory',
     path   => $target_dir,
@@ -36,6 +38,7 @@ class selenium::chrome(
   exec { "unzip -u ${source_file}":
     path    => '/usr/bin:/usr/sbin:/bin:/usr/local/bin',
     cwd     => '/opt/chromedriver',
+    require => Package['unzip'],
   }
 
   file { "${target_install}/chromedriver":
