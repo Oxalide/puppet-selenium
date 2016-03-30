@@ -12,16 +12,19 @@
 #  [*from_repo*]
 #    Install chrome from official repo
 #
+#  [*chrome_url_deb*]
+#    The url package debian
+#
 
 class selenium::chrome(
   $version        = "2.10",
   $target_install = '/usr/local/bin',
   $from_repo      = false
+  $chrome_url_deb        = 'http://mirror.pcbeta.com/google/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_41.0.2272.118-1_amd64.deb'
 ) {
   $source_file           = "chromedriver_linux64.zip"
   $source_url            = "http://chromedriver.storage.googleapis.com/${version}/${source_file}"
   $target_dir            = '/opt/chromedriver'
-  $chrome_url_deb        = 'http://mirror.pcbeta.com/google/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_41.0.2272.118-1_amd64.deb'
   $chrome_destination    = '/tmp/google-chrome.deb'
 
   ensure_packages(['unzip'])
