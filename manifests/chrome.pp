@@ -91,6 +91,9 @@ class selenium::chrome(
     package { 'xdg-utils':
       ensure => installed,
     }->
+    package { 'libpango1.0-0':
+      ensure => installed,
+    }->
     package { "google-chrome":
       provider => dpkg,
       ensure   => latest,
