@@ -29,16 +29,22 @@ define selenium::config(
     $template = "${module_name}/init.d/debian.selenium.erb"
   }
 
-case $::osfamily {
+  case $::osfamily {
     'redhat', 'Debian': {
       file { "/etc/init.d/${prog}":
         ensure  => 'file',
         owner   => 'root',
         group   => 'root',
         mode    => '0755',
-        content => template("${template}"),
-      } ~>
-      service { $prog:
+        content => template($template),
+      }
+      ~> exec { 'selenium_systemd_reload':
+        command     => 'systemctl daemon-reload',
+        path        => '/bin:/usr/bin',
+        refreshonly => true,
+        onlyif      => 'test -d /run/systemd',
+      }
+      ~> service { $prog:
         ensure     => running,
         hasstatus  => true,
         hasrestart => true,
@@ -49,5 +55,4 @@ case $::osfamily {
       fail("Module ${module_name} is not supported on ${::operatingsystem}")
     }
   }
-
 }
