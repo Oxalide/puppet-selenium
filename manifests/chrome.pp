@@ -94,6 +94,9 @@ class selenium::chrome(
     package { 'libpango1.0-0':
       ensure => installed,
     }->
+    package { 'gconf-service':
+      ensure => installed,
+    }->
     package { "google-chrome":
       provider => dpkg,
       ensure   => latest,
