@@ -386,4 +386,4 @@ See Also
  * [`puppetlabs-java`](https://github.com/puppetlabs/puppetlabs-java)
  * [`p0deje/display`](https://github.com/p0deje/puppet-display)
  * [`maestrodev/wget`](https://github.com/maestrodev/puppet-wget)
- * [`rodjek/logrotate`](https://github.com/rodjek/puppet-logrotate)
+ * [`voxpupuli/logrotate`](https://github.com/voxpupuli/puppet-logrotate)
